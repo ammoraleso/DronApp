@@ -1,0 +1,10 @@
+# Ignore IDE and Operating System artifacts
+.idea
+.classpath
+.metadata
+.project
+.settings
+out
+
+maven-eclipse.xml
+*.iml
