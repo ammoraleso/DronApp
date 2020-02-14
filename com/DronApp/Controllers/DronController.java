@@ -32,36 +32,36 @@ public class DronController {
         for(char mov : movs){
             switch (dron.getCoordinate().getDirection()) {
                 case Constants.NORTH:
-                    if (mov == 'A') {
+                    if (mov == Constants.MOV_A) {
                         dron.getCoordinate().setY(dron.getCoordinate().getY() + 1);
-                    } else if (mov == 'I') {
+                    } else if (mov == Constants.MOV_I) {
                         dron.getCoordinate().setDirection(Constants.WEAST);
                     } else {
                         dron.getCoordinate().setDirection(Constants.EAST);
                     }
                     break;
                 case Constants.SOUTH:
-                    if (mov == 'A') {
+                    if (mov == Constants.MOV_A) {
                         dron.getCoordinate().setY(dron.getCoordinate().getY() - 1);
-                    } else if (mov == 'I') {
+                    } else if (mov == Constants.MOV_I) {
                         dron.getCoordinate().setDirection(Constants.EAST);
                     } else {
                         dron.getCoordinate().setDirection(Constants.WEAST);
                     }
                     break;
                 case Constants.EAST:
-                    if (mov == 'A') {
+                    if (mov == Constants.MOV_A) {
                         dron.getCoordinate().setX(dron.getCoordinate().getX() + 1);
-                    } else if (mov == 'I') {
+                    } else if (mov == Constants.MOV_I) {
                         dron.getCoordinate().setDirection(Constants.NORTH);
                     } else {
                         dron.getCoordinate().setDirection(Constants.SOUTH);
                     }
                     break;
                 case Constants.WEAST:
-                    if (mov == 'A') {
+                    if (mov == Constants.MOV_A) {
                         dron.getCoordinate().setX(dron.getCoordinate().getX() -1);
-                    } else if (mov == 'I') {
+                    } else if (mov == Constants.MOV_I) {
                         dron.getCoordinate().setDirection(Constants.SOUTH);
                     } else {
                         dron.getCoordinate().setDirection(Constants.NORTH);
