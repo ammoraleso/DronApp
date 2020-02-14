@@ -1,10 +1,10 @@
 package com.DronApp.Main;
 
-import com.DroneApp.Constants.Constants;
+import com.DronApp.Controllers.DronController;
 
 public class Main {
 
     public static void main(String[] args) {
-        System.out.println("Hello Number of drone is " + Constants.DronNumber);
+        System.out.println(DronController.beginOrders());
     }
 }
