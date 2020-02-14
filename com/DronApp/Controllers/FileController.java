@@ -24,6 +24,10 @@ public class FileController {
     private static List<String> filesDrones;
     private static FileController fileController;
 
+    public static List<String> getFilesDrones() {
+        return filesDrones;
+    }
+
     /**
      * Singleon Instance
      */
@@ -123,7 +127,7 @@ public class FileController {
         }
     }
 
-    private static boolean validateStructure(String line) {
+    public static boolean validateStructure(String line) {
 
         Pattern pattern = Pattern.compile(Constants.REGEX_STRUCTURE_LINE);
         Matcher matcher = pattern.matcher(line);
@@ -133,7 +137,7 @@ public class FileController {
         return Boolean.TRUE;
     }
 
-    private static void listFileForFolder() {
+    public static void listFileForFolder() {
         filesDrones = new ArrayList();
         final File file = new File(Constants.FOLDER_PATH_IN);
         for (final File fileIn : file.listFiles()) {
@@ -141,7 +145,6 @@ public class FileController {
                 listFileForFolder();
             } else {
                 filesDrones.add(fileIn.getName());
-                //System.out.println(fileIn.getName());
             }
         }
     }
