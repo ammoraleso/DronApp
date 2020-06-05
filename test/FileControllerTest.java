@@ -1,5 +1,6 @@
 import com.DronApp.Controllers.DronController;
 import com.DronApp.Controllers.FileController;
+import com.DronApp.Interfaces.FileInterface;
 import org.junit.Test;
 
 import java.util.List;
@@ -15,15 +16,14 @@ public class FileControllerTest {
     @Test
     public void validateStructure() {
         String path = "DDAIAD";
-        assertTrue(FileController.validateStructure(path));
+        assertTrue(FileInterface.validateStructure(path));
     }
 
     @Test
     public void validateStructureFail() {
         String path = "DDAIADSSASASXXXXXX";
-        assertFalse(FileController.validateStructure(path));
+        assertFalse(FileInterface.validateStructure(path));
     }
-
 
     @Test
     public void obtainRoutes() {

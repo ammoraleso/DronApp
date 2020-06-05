@@ -2,6 +2,8 @@ package com.DronApp.Constants;
 
 public class Constants {
 
+    private Constants() {}
+
     public static final String FOLDER_PATH_IN = "./resources/in";
     public static final String FOLDER_PATH_OUT = "./resources/out";
     public static final int DRONNUMBER = 3;

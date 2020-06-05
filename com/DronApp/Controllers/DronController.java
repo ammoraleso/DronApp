@@ -9,15 +9,13 @@ import java.util.LinkedHashMap;
 
 public class DronController {
 
-    private static LinkedHashMap<String,Dron> listOfDrons;
+    private static FileController fileController = FileController.getFileControllerInstace();
 
     public static String beginOrders() {
-
-        FileController fileController = FileController.getFileControllerInstace();
         try {
 
-            listOfDrons = fileController.obtainRoutes(Constants.DRONNUMBER);
-            FileController.writeFile(listOfDrons);
+            LinkedHashMap<String,Dron> listOfDrons = (LinkedHashMap<String, Dron>) fileController.obtainRoutes(Constants.DRONNUMBER);
+            fileController.writeFile(listOfDrons);
 
         } catch (FileException e) {
             return e.getMessage();
@@ -79,7 +77,6 @@ public class DronController {
                 .append(dron.getCoordinate().getDirection());
 
         dron.getMovements().add(movementSb.toString());
-        //System.out.println( movementSb.toString());
         return  Math.abs(dron.getCoordinate().getX()) > 10 || Math.abs(dron.getCoordinate().getY()) > 10 ? Boolean.FALSE : Boolean.TRUE;
     }
 }
