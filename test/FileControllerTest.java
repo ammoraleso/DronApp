@@ -27,7 +27,7 @@ public class FileControllerTest {
 
     @Test
     public void obtainRoutes() {
-        DronController dronController = new DronController();
+        DronController dronController = null;
         String message = dronController.beginOrders();
         assertTrue(message.equals("The order was genedated succesfully"));
     }

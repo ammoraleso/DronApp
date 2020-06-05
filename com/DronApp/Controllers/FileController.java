@@ -10,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -30,23 +31,22 @@ public class FileController implements FileInterface {
      */
     public static FileController getFileControllerInstace() {
         if(fileController == null){
-            return fileController = new FileController();
+            fileController = new FileController();
+            return fileController;
         }
         return fileController;
     }
 
     @Override
-    public void writeFile(Map<String,Dron> listOfDrones){
+    public void writeFile(Map<String,Dron> listOfDrones) throws IOException {
         FileWriter outputFile = null;
         for (Map.Entry<String, Dron> entry : listOfDrones.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
             PrintWriter pw = null;
-            try
-            {
-                outputFile = new FileWriter(Constants.FOLDER_PATH_OUT.concat("/").concat(key.replace("in","out")));
-                pw = new PrintWriter(outputFile);
-
+            outputFile = new FileWriter(Constants.FOLDER_PATH_OUT.concat("/").concat(key.replace("in","out")));
+            pw = new PrintWriter(outputFile);
+            try{
                 if(((Dron) value).getErrorRoute()==null){
                     for(String mov : ((Dron) value).getMovements()){
                         pw.println(mov);
@@ -77,27 +77,20 @@ public class FileController implements FileInterface {
         for(String fileDron : filesDrones){
             String error = null;
             Dron dron = new Dron(new Coordinate(0, 0, Constants.NORTH));
-            try {
-                String path = Constants.FOLDER_PATH_IN.concat("/").concat(fileDron);
-                File fileIn = FileInterface.readFile(path,dronLimit);
-                FileReader fileReader = new FileReader(fileIn);
+            String path = Constants.FOLDER_PATH_IN.concat("/").concat(fileDron);
 
-                BufferedReader buffer = new BufferedReader(fileReader);
+            File fileIn = FileInterface.readFile(path,dronLimit);
+            try (FileReader fileReader = new FileReader(fileIn); BufferedReader buffer = new BufferedReader(fileReader)){
                 String line;
                 for (int i = 0;(line = buffer.readLine()) != null; i++) {
-                    if(line.equals("")){
-                        continue;
-                    }
-                    if (i >= dronLimit) {
-                        error = "The file have exced the limit of dron";
-                        break;
-                    }
-                    if (!FileInterface.validateStructure(line)) {
-                        error = "Structure of routes is invalid";
-                        break;
-                    }
-                    if(!DronController.validateCoverage(line,dron)){
-                        error = "Route is out of range";
+                    if(!line.equals("")){
+                        if (i >= dronLimit) {
+                            error = "The file have exced the limit of dron";
+                        } else if (!FileInterface.validateStructure(line)) {
+                            error = "Structure of routes is invalid";
+                        } else if(!DronController.validateCoverage(line,dron)){
+                            error = "Route is out of range";
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -105,10 +98,8 @@ public class FileController implements FileInterface {
             }
             if(error!=null){
                 dron.setErrorRoute(error);
-            }else{
-                if(dron.getMovements()==null || dron.getMovements().isEmpty()){
-                    dron.setErrorRoute("File " + fileDron + " empty for dron ");
-                }
+            }else if(dron.getMovements()==null || dron.getMovements().isEmpty()){
+                dron.setErrorRoute("File " + fileDron + " empty for dron ");
             }
             listOfDrons.put(fileDron,dron);
         }

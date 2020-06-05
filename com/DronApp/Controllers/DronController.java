@@ -9,6 +9,10 @@ import java.util.LinkedHashMap;
 
 public class DronController {
 
+    private DronController() {
+        //not called
+    }
+
     private static FileController fileController = FileController.getFileControllerInstace();
 
     public static String beginOrders() {

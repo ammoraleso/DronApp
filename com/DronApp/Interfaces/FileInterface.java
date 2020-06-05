@@ -6,13 +6,14 @@ import com.DronApp.Models.Dron;
 import com.DronApp.Utilis.Utils;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public interface FileInterface {
 
-    void writeFile(Map<String,Dron> listOfDrones);
+    void writeFile(Map<String,Dron> listOfDrones) throws IOException;
     static File readFile(String path, int dronLimit) throws FileException{
         if ( Utils.isEmpty(path) || dronLimit <= 0) {
             throw new FileException("Path or capacity of drone is undefine");
