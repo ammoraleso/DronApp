@@ -18,7 +18,9 @@ public class DronController {
     public static String beginOrders() {
         try {
 
-            LinkedHashMap<String,Dron> listOfDrons = (LinkedHashMap<String, Dron>) fileController.obtainRoutes(Constants.DRONNUMBER);
+            LinkedHashMap<String,Dron> listOfDrons =
+                    (LinkedHashMap<String, Dron>) fileController.obtainRoutes(Constants.DRONNUMBER);
+
             fileController.writeFile(listOfDrons);
 
         } catch (FileException e) {
@@ -30,8 +32,11 @@ public class DronController {
     }
 
     public static boolean validateCoverage(String line,Dron dron) {
+
         char[] movs = line.toCharArray();
+
         for(char mov : movs){
+
             switch (dron.getCoordinate().getDirection()) {
                 case Constants.NORTH:
                     if (mov == Constants.MOV_A) {
@@ -72,6 +77,7 @@ public class DronController {
                 default:
                     break;
             }
+
         }
 
         StringBuilder movementSb = new StringBuilder("(").append(dron.getCoordinate().getX())

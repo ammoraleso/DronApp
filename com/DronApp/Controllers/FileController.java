@@ -39,14 +39,16 @@ public class FileController implements FileInterface {
 
     @Override
     public void writeFile(Map<String,Dron> listOfDrones) throws IOException {
-        FileWriter outputFile = null;
         for (Map.Entry<String, Dron> entry : listOfDrones.entrySet()) {
+
             String key = entry.getKey();
             Object value = entry.getValue();
-            PrintWriter pw = null;
-            outputFile = new FileWriter(Constants.FOLDER_PATH_OUT.concat("/").concat(key.replace("in","out")));
-            pw = new PrintWriter(outputFile);
-            try{
+
+            try( FileWriter outputFile =
+                         new FileWriter(Constants.FOLDER_PATH_OUT.concat("/")
+                             .concat(key.replace("in","out"))) ;
+                 PrintWriter pw = new PrintWriter(outputFile)) {
+
                 if(((Dron) value).getErrorRoute()==null){
                     for(String mov : ((Dron) value).getMovements()){
                         pw.println(mov);
@@ -54,34 +56,30 @@ public class FileController implements FileInterface {
                 }else{
                     pw.println(((Dron) value).getErrorRoute());
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
-            } finally {
-                try {
-                    if (null != outputFile){
-                        outputFile.close();
-                    }
-                    if(pw != null){
-                        pw.close();
-                    }
-                } catch (Exception e2) {
-                    e2.printStackTrace();
-                }
             }
         }
     }
 
     public Map<String,Dron> obtainRoutes(int dronLimit) throws FileException {
+
         listFileForFolder();
         LinkedHashMap<String,Dron> listOfDrons = new LinkedHashMap<>();
+
         for(String fileDron : filesDrones){
+
             String error = null;
             Dron dron = new Dron(new Coordinate(0, 0, Constants.NORTH));
             String path = Constants.FOLDER_PATH_IN.concat("/").concat(fileDron);
 
             File fileIn = FileInterface.readFile(path,dronLimit);
-            try (FileReader fileReader = new FileReader(fileIn); BufferedReader buffer = new BufferedReader(fileReader)){
+            try (FileReader fileReader = new FileReader(fileIn);
+                 BufferedReader buffer = new BufferedReader(fileReader)){
+
                 String line;
+
                 for (int i = 0;(line = buffer.readLine()) != null; i++) {
                     if(!line.equals("")){
                         if (i >= dronLimit) {
@@ -93,9 +91,11 @@ public class FileController implements FileInterface {
                         }
                     }
                 }
+
             } catch (Exception e) {
                 throw new FileException("FileController - ObtainRoutes, Error: " + e, e);
             }
+
             if(error!=null){
                 dron.setErrorRoute(error);
             }else if(dron.getMovements()==null || dron.getMovements().isEmpty()){
@@ -107,14 +107,18 @@ public class FileController implements FileInterface {
     }
 
     public static void listFileForFolder() {
+
         filesDrones = new ArrayList<>();
         final File file = new File(Constants.FOLDER_PATH_IN);
+
         for (final File fileIn : file.listFiles()) {
+
             if (fileIn.isDirectory()) {
                 listFileForFolder();
             } else {
                 filesDrones.add(fileIn.getName());
             }
+
         }
     }
 }
